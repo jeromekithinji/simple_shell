@@ -1,6 +1,14 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <string.h>
+
 int add_numbers(int a, int b);
+char *get_path_cmnd(char *command);
+int execute_comnd(char *command);
 
 #endif 
