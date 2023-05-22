@@ -8,7 +8,9 @@
 #include <string.h>
 
 int add_numbers(int a, int b);
-char *get_command_path(char *command);
-int execute_command(char *command);
+char *get_path_command(char *command);
+void exit_shell();
+void print_env();
+void execute_command(char *command);
 
 #endif 
