@@ -7,7 +7,7 @@
   * Return: 0 on success.
   */
 
-int main()
+int main(void)
 {
 	int result = add_numbers(5, 10);
 	char command[1024];
