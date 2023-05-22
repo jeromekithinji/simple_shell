@@ -7,33 +7,57 @@
  * Return: Path to the command or NULL if not found
  */
 
-char *get_command_path(char *command)
+char *get_path_command(char *command)
 {
-	char *path_env, *token, *command_path;
-	char *delimiters = ":";
+	char *path_env = getenv("PATH");
+	char *token, *path_command;
+	const char *delimiters = ":";
 
-	path_env = getenv("PATH");
 	if (path_env == NULL)
 		return (NULL);
 
 	token = strtok(path_env, delimiters);
 	while (token != NULL)
 	{
-		command_path = malloc(strlen(token) + strlen(command) + 2);
-		if (command_path == NULL)
+		path_command = malloc(strlen(token) + strlen(command) + 2);
+		if (path_command == NULL)
 		{
 			perror("Malloc failed");
 			return (NULL);
 		}
 
-		sprintf(command_path, "%s/%s", token, command);
-		if (access(command_path, F_OK) == 0)
-			return (command_path);
-
-		free(command_path);
+		sprintf(path_command, "%s/%s", token, command);
+		if (access(path_command, F_OK) == 0)
+			return (path_command);
+		
+		free(path_command);
 		token = strtok(NULL, delimiters);
 	}
 	return (NULL);
+}
+
+/**
+ * exit_shell - Exit the shell window
+ */
+
+void exit_shell(void)
+{
+	_exit(0);
+}
+
+/**
+ * print_env - Print the current working environment
+ */
+
+void print_env(void)
+{
+	char **env = environ;
+
+	while (*env != NULL)
+	{
+		printf("%s\n", *env);
+		env++;
+	}
 }
 
 /**
@@ -43,41 +67,51 @@ char *get_command_path(char *command)
  * Return: 0 on success or -1 on failure
  */
 
-int execute_command(char *command)
+void execute_command(char *command)
 {
-	char *command_path;
+	char *path_command;
 	pid_t pid;
 	int status;
 
-	command_path = get_command_path(command);
-	if (command_path == NULL)
+	if (strcmp(command, "exit") == 0)
 	{
-		write(STDERR_FILENO, "Command not found\n", 18);
-		return (-1);
+		exit_shell();
+		return;
+	}
+		else if (strcmp(command, "env") == 0)
+		{
+			print_env();
+			return;
+		}
+
+	path_command = get_path_command(command);
+	if (path_command == NULL)
+	{
+		dprintf(STDERR_FILENO, "Command not found\n");
+		return;
 	}
 
 	pid = fork();
 	if (pid == -1)
 	{
 		perror("Fork failed");
-		free(command_path);
-		return (-1);
+		free(path_command);
+		return;
 	}
 
 	if (pid == 0)
 	{
-		if (execve(command_path, &command, NULL) == -1)
+		char *args[] = {command, NULL};
+		if (execve(path_command, args, NULL) == -1)
 		{
 			perror("Exec failed");
-			free(command_path);
-			_exit(EXIT_FAILURE);
+			free(path_command);
+			exit_shell();
 		}
 	}
 	else
 	{
-		wait(&status);
+		waitpid(pid, &status, 0);
 	}
-
-	free(command_path);
-	return (0);
+	free(path_command);
 }
