@@ -40,7 +40,7 @@ char *get_path_command(char *command)
  * exit_shell - Exit the shell window
  */
 
-void exit_shell(void)
+void exit_shell()
 {
 	_exit(0);
 }
@@ -49,7 +49,7 @@ void exit_shell(void)
  * print_env - Print the current working environment
  */
 
-void print_env(void)
+void print_env()
 {
 	char **env = environ;
 
