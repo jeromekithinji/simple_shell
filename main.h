@@ -8,7 +8,7 @@
 #include <string.h>
 
 int add_numbers(int a, int b);
-char *get_path_cmnd(char *command);
-int execute_comnd(char *command);
+char *get_command_path(char *command);
+int execute_command(char *command);
 
 #endif 
