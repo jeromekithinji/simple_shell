@@ -40,7 +40,6 @@ int execute_command(char *command)
 	{
 		perror("fork");
 		free(argv);
-		free(pid);
 		return (-1);
 	}
 
