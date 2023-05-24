@@ -18,7 +18,7 @@ int main(void)
 		printf("$ ");
 		fflush(stdout);
 		bytesRead = get_command(command);
-		
+
 		if (bytesRead == -1)
 			continue;
 		if (bytesRead == 0)
