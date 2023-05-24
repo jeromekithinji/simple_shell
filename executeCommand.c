@@ -1,7 +1,7 @@
 #include "main.h"
 
 /**
- * *get_command_path - Get path to command if existing
+ * *get_path_command - Get path to command if existing
  *
  * @command: Command to find in the PATH
  * Return: Path to the command or NULL if not found
