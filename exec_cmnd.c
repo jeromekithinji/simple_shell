@@ -1,5 +1,3 @@
-#define BUFFER_SIZE 1024
-
 /**
  * get_command - Read a command from input
  *
@@ -7,15 +5,15 @@
  * Return: Number of characters read, or -1 on failure
  */
 
-ssize_t get_command(char *command)
+int get_command(char *command)
 {
-	 ssize_t bytes_read;
+	int bytesRead;
 
-	bytes_read = read(STDIN_FILENO, command, BUFFER_SIZE);
-	if (bytes_read == -1)
+	bytesRead = read(STDIN_FILENO, command, BUFFER_SIZE);
+	if (bytesRead == -1)
 		perror("read");
 
-	return (bytes_read);
+	return (bytesRead);
 }
 
 /**
@@ -27,14 +25,14 @@ ssize_t get_command(char *command)
 
 int execute_command(char *command)
 {
-	pid_t pid;
+	int pid;
 	int status;
 
 	pid = fork();
 	if (pid == -1)
 	{
 		perror("fork");
-		return (-1);
+		return -1;
 	}
 
 	if (pid == 0)
@@ -51,5 +49,5 @@ int execute_command(char *command)
 	{
 		wait(&status);
 	}
-	return (0);
+	return 0;
 }
