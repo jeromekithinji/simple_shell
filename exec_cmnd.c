@@ -14,7 +14,8 @@ int get_command(char *command)
 	bytesRead = read(STDIN_FILENO, command, BUFFER_SIZE);
 	if (bytesRead == -1)
 		perror("read");
-
+	
+	free(command);
 	return (bytesRead);
 }
 
@@ -38,6 +39,8 @@ int execute_command(char *command)
 	if (pid == -1)
 	{
 		perror("fork");
+		free(argv);
+		free(pid);
 		return (-1);
 	}
 
@@ -47,6 +50,7 @@ int execute_command(char *command)
 		if (argv == NULL)
 		{
 			perror("malloc");
+			free(argv);
 			_exit(EXIT_FAILURE);
 		}
 
@@ -58,6 +62,7 @@ int execute_command(char *command)
 		if (execve("/bin/sh", argv, NULL) == -1)
 		{
 			perror("execve");
+			free(argv);
 			_exit(EXIT_FAILURE);
 		}
 	}
@@ -67,6 +72,8 @@ int execute_command(char *command)
 	}
 
 	free(argv);
+	free(command);
+
 
 	return (0);
 }
