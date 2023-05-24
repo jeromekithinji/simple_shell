@@ -1,3 +1,5 @@
+#include "main.h"
+
 /**
  * get_command - Read a command from input
  *
