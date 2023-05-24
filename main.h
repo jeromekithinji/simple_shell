@@ -14,5 +14,6 @@ char *get_path_command(char *command);
 void exit_shell();
 void print_env();
 void execute_command(char *command);
+char *get_line(void);
 
 #endif 
