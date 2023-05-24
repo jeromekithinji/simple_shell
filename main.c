@@ -6,12 +6,11 @@
   *
   * Return: 0 on success
   */
-
 int main(void)
 {
 	int result = add_numbers(5, 10);
 	char command[BUFFER_SIZE];
-	ssize_t bytesRead;
+	int bytesRead;
 
 	while (1)
 	{
