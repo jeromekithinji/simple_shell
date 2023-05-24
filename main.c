@@ -11,7 +11,7 @@ int main(void)
 {
 	int result = add_numbers(5, 10);
 	char command[BUFFER_SIZE];
-	ssize_t bytes_read;
+	ssize_t bytesRead;
 
 	while (1)
 	{
