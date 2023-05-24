@@ -27,10 +27,11 @@ int get_command(char *command)
 
 int execute_command(char *command)
 {
-	int pid;
+	pid_t pid;
 	int status;
 
 	pid = fork();
+
 	if (pid == -1)
 	{
 		perror("fork");
@@ -39,7 +40,10 @@ int execute_command(char *command)
 
 	if (pid == 0)
 	{
-		char *argv[] = {command, NULL};
+		char *argv[3];
+		argv[0] = command;
+		argv[1] = command;
+		argv[2] = NULL;
 
 		if (execve(command, argv, NULL) == -1)
 		{
@@ -51,5 +55,6 @@ int execute_command(char *command)
 	{
 		wait(&status);
 	}
+
 	return 0;
 }
