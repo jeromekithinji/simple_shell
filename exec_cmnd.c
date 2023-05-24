@@ -18,14 +18,6 @@ int get_command(char *command)
 	return (bytesRead);
 }
 
-/**
- * execute_command - Execute a command given
- *
- * @command: Command to execute
- * Return: 0 on success, -1 on failure
- */
-
-#include "main.h"
 
 /**
  * execute_command - Execute a command given
@@ -49,7 +41,8 @@ int execute_command(char *command)
 
 	if (pid == 0)
 	{
-		char *argv[] = {"/bin/sh", "-c", command, NULL};
+		char *argv[] = {"/bin/sh", "-c", NULL, NULL};
+		argv[2] = command;
 
 		if (execve("/bin/sh", argv, NULL) == -1)
 		{
