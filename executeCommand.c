@@ -40,9 +40,9 @@ char *get_path_command(char *command)
  * exit_shell - Exit the shell window
  */
 
-void exit_shell(void)
+void exit_shell(int status)
 {
-	_exit(0);
+	exit(status);
 }
 
 /**
@@ -75,7 +75,16 @@ void execute_command(char *command)
 
 	if (strcmp(command, "exit") == 0)
 	{
-		exit_shell();
+		char *arg = strtok(NULL, " ");
+		if (arg != NULL)
+		{
+			int exit_status = atoi(arg);
+			exit_shell(exit_status);
+		}
+		else
+		{
+			exit_shell(0);
+		}
 		return;
 	}
 	else if (strcmp(command, "env") == 0)
