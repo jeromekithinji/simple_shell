@@ -14,7 +14,7 @@ int get_command(char *command)
 	bytesRead = read(STDIN_FILENO, command, BUFFER_SIZE);
 	if (bytesRead == -1)
 		perror("read");
-	
+
 	free(command);
 	return (bytesRead);
 }
