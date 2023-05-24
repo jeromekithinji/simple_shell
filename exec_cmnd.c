@@ -25,6 +25,15 @@ int get_command(char *command)
  * Return: 0 on success, -1 on failure
  */
 
+#include "main.h"
+
+/**
+ * execute_command - Execute a command given
+ *
+ * @command: Command to execute
+ * Return: 0 on success, -1 on failure
+ */
+
 int execute_command(char *command)
 {
 	pid_t pid;
@@ -40,12 +49,9 @@ int execute_command(char *command)
 
 	if (pid == 0)
 	{
-		char *argv[3];
-		argv[0] = command;
-		argv[1] = command;
-		argv[2] = NULL;
+		char *argv[] = {"/bin/sh", "-c", command, NULL};
 
-		if (execve(command, argv, NULL) == -1)
+		if (execve("/bin/sh", argv, NULL) == -1)
 		{
 			perror("execve");
 			_exit(EXIT_FAILURE);
