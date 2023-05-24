@@ -10,6 +10,6 @@
 
 int add_numbers(int a, int b);
 int execute_command(char *command);
-ssize_t get_command(char *command);
+int get_command(char *command);
 
 #endif
