@@ -13,6 +13,5 @@
 int add_numbers(int a, int b);
 int execute_command(char *command);
 int get_command(char *command);
-void free_resources(char *command)
 
 #endif

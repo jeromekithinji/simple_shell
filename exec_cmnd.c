@@ -7,17 +7,16 @@
  * Return: Number of characters read, or -1 on failure
  */
 
-char *get_command(void)
+int get_command(char *command)
 {
-	char *command = NULL;
-	size_t bufsize = 0;
-	ssize_t bytesRead;
+	int bytesRead;
 
-	bytesRead = getline(&command, &bufsize, stdin);
+	bytesRead = read(STDIN_FILENO, command, BUFFER_SIZE);
 	if (bytesRead == -1)
-		perror("getline");
-	
-	return (command);
+		perror("read");
+
+	free(command);
+	return (bytesRead);
 }
 
 
@@ -32,7 +31,7 @@ int execute_command(char *command)
 {
 	pid_t pid;
 	int status;
-	int argc = 3; // Number of arguments in argv
+	int argc = 3;
 	char **argv = NULL;
 
 	pid = fork();
@@ -72,18 +71,8 @@ int execute_command(char *command)
 	}
 
 	free(argv);
+	free(command);
+
 
 	return (0);
-}
-
-/**
- * free_resources - Free allocated resources
- *
- * @command: Command string
- * Return: None
- */
-
-void free_resources(char *command)
-{
-	free(command);
 }

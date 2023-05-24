@@ -9,32 +9,27 @@
 int main(void)
 {
 	int result = add_numbers(5, 10);
-	char *command;
+	char command[BUFFER_SIZE];
+	int bytesRead;
 
 	while (1)
 	{
 		printf("$ ");
 		fflush(stdout);
+		bytesRead = get_command(command);
 
-		command = get_command();
-		if (command == NULL)
+		if (bytesRead == -1)
 			continue;
-
-		if (strlen(command) == 1 && command[0] == '\n')
+		if (bytesRead == 0)
 		{
 			printf("\n");
-			free_resources(command);
 			break;
 		}
-
-		command[strlen(command) - 1] = '\0';
+		command[bytesRead - 1] = '\0';
 
 		if (execute_command(command) == -1)
 			continue;
-
-		free_resources(command);
 	}
-
 	printf("The result is: %d\n", result);
 
 	return (0);
