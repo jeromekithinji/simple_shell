@@ -38,7 +38,7 @@ int execute_command(char *command)
 	if (pid == -1)
 	{
 		perror("fork");
-		return -1;
+		return (-1);
 	}
 
 	if (pid == 0)
@@ -68,5 +68,5 @@ int execute_command(char *command)
 
 	free(argv);
 
-	return 0;
+	return (0);
 }
