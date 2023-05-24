@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include <string.h>
 
+#define BUFFER_SIZE 1024
+
 int add_numbers(int a, int b);
 int execute_command(char *command);
 ssize_t get_command(char *command);
