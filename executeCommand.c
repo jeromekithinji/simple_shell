@@ -9,10 +9,10 @@
 
 char *get_path_command(char *command)
 {
-	char *path_env = getenv("PATH");
-	char *token, *path_command;
-	const char *delimiters = ":";
+	char *path_env, *token, *path_command;
+	char *delimiters = ":";
 
+	path_env = getenv("PATH");
 	if (path_env == NULL)
 		return (NULL);
 
@@ -28,8 +28,8 @@ char *get_path_command(char *command)
 
 		sprintf(path_command, "%s/%s", token, command);
 		if (access(path_command, F_OK) == 0)
-			return (path_command);
-		
+			return path_command;
+
 		free(path_command);
 		token = strtok(NULL, delimiters);
 	}
@@ -72,25 +72,25 @@ void execute_command(char *command)
 	char *path_command;
 	pid_t pid;
 	int status;
-
+	
 	if (strcmp(command, "exit") == 0)
 	{
 		exit_shell();
 		return;
 	}
-		else if (strcmp(command, "env") == 0)
-		{
-			print_env();
-			return;
-		}
-
+	else if (strcmp(command, "env") == 0)
+	{
+		print_env();
+		return;
+	}
+	
 	path_command = get_path_command(command);
 	if (path_command == NULL)
 	{
-		dprintf(STDERR_FILENO, "Command not found\n");
+		write(STDERR_FILENO, "Command not found\n", 18);
 		return;
 	}
-
+	
 	pid = fork();
 	if (pid == -1)
 	{
@@ -98,20 +98,19 @@ void execute_command(char *command)
 		free(path_command);
 		return;
 	}
-
+	
 	if (pid == 0)
 	{
-		char *args[] = {command, NULL};
-		if (execve(path_command, args, NULL) == -1)
+		if (execve(path_command, &command, NULL) == -1)
 		{
 			perror("Exec failed");
 			free(path_command);
-			exit_shell();
+			_exit(EXIT_FAILURE);
 		}
 	}
 	else
 	{
-		waitpid(pid, &status, 0);
+		wait(&status);
 	}
 	free(path_command);
 }
