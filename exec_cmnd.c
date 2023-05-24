@@ -30,20 +30,30 @@ int execute_command(char *command)
 {
 	pid_t pid;
 	int status;
+	int argc = 3;
+	char **argv = NULL;
 
 	pid = fork();
 
 	if (pid == -1)
 	{
 		perror("fork");
-		return (-1);
+		return -1;
 	}
 
 	if (pid == 0)
 	{
-		char *argv[] = {"/bin/sh", "-c", NULL, NULL};
-		
+		argv = malloc((argc + 1) * sizeof(char *));
+		if (argv == NULL)
+		{
+			perror("malloc");
+			_exit(EXIT_FAILURE);
+		}
+
+		argv[0] = "/bin/sh";
+		argv[1] = "-c";
 		argv[2] = command;
+		argv[3] = NULL;
 
 		if (execve("/bin/sh", argv, NULL) == -1)
 		{
@@ -56,5 +66,7 @@ int execute_command(char *command)
 		wait(&status);
 	}
 
-	return (0);
+	free(argv);
+
+	return 0;
 }
