@@ -38,6 +38,8 @@ char *get_path_command(char *command)
 
 /**
  * exit_shell - Exit the shell window
+ *
+ * @status: Exit status
  */
 
 void exit_shell(int status)
@@ -76,9 +78,11 @@ void execute_command(char *command)
 	if (strcmp(command, "exit") == 0)
 	{
 		char *arg = strtok(NULL, " ");
+		
 		if (arg != NULL)
 		{
 			int exit_status = atoi(arg);
+			
 			exit_shell(exit_status);
 		}
 		else
