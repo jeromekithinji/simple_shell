@@ -28,7 +28,7 @@ char *get_path_command(char *command)
 
 		sprintf(path_command, "%s/%s", token, command);
 		if (access(path_command, F_OK) == 0)
-			return path_command;
+			return (path_command);
 
 		free(path_command);
 		token = strtok(NULL, delimiters);
@@ -40,7 +40,7 @@ char *get_path_command(char *command)
  * exit_shell - Exit the shell window
  */
 
-void exit_shell()
+void exit_shell(void)
 {
 	_exit(0);
 }
@@ -49,7 +49,7 @@ void exit_shell()
  * print_env - Print the current working environment
  */
 
-void print_env()
+void print_env(void)
 {
 	char **env = environ;
 
@@ -72,7 +72,7 @@ void execute_command(char *command)
 	char *path_command;
 	pid_t pid;
 	int status;
-	
+
 	if (strcmp(command, "exit") == 0)
 	{
 		exit_shell();
@@ -83,14 +83,14 @@ void execute_command(char *command)
 		print_env();
 		return;
 	}
-	
+
 	path_command = get_path_command(command);
 	if (path_command == NULL)
 	{
 		write(STDERR_FILENO, "Command not found\n", 18);
 		return;
 	}
-	
+
 	pid = fork();
 	if (pid == -1)
 	{
@@ -98,7 +98,7 @@ void execute_command(char *command)
 		free(path_command);
 		return;
 	}
-	
+
 	if (pid == 0)
 	{
 		if (execve(path_command, &command, NULL) == -1)
