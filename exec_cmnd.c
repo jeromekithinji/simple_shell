@@ -42,6 +42,7 @@ int execute_command(char *command)
 	if (pid == 0)
 	{
 		char *argv[] = {"/bin/sh", "-c", NULL, NULL};
+		
 		argv[2] = command;
 
 		if (execve("/bin/sh", argv, NULL) == -1)
