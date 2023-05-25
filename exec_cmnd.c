@@ -31,34 +31,64 @@ int execute_command(char *command)
 {
 	pid_t pid;
 	int status;
-	int argc = 3;
+	char *path;
+	int argc = 4;
 	char **argv = NULL;
-
+	
 	pid = fork();
 
 	if (pid == -1)
 	{
 		perror("fork");
-		free(argv);
-		return (-1);
+		return -1;
 	}
 
 	if (pid == 0)
 	{
+		path = getenv("PATH");
+		char *token;
+		char cmd_path[BUFFER_SIZE];
+		int found = 0;
+		
 		argv = malloc((argc + 1) * sizeof(char *));
 		if (argv == NULL)
 		{
 			perror("malloc");
+			_exit(EXIT_FAILURE);
+		}
+
+		argv[0] = command;
+		argv[1] = NULL;
+		
+		if (strchr(command, '/') == NULL)
+		{
+			token = strtok(path, ":");
+			while (token != NULL)
+			{
+				snprintf(cmd_path, sizeof(cmd_path), "%s/%s", token, command);
+				if (access(cmd_path, X_OK) == 0)
+				{
+					argv[0] = cmd_path;
+					found = 1;
+					break;
+				}
+				token = strtok(NULL, ":");
+			}
+		}
+		else
+		{
+			if (access(command, X_OK) == 0)
+				found = 1;
+		}
+		
+		if (!found)
+		{
+			fprintf(stderr, "%s: command not found\n", command);
 			free(argv);
 			_exit(EXIT_FAILURE);
 		}
 
-		argv[0] = "/bin/sh";
-		argv[1] = "-c";
-		argv[2] = command;
-		argv[3] = NULL;
-
-		if (execve("/bin/sh", argv, NULL) == -1)
+		if (execve(argv[0], argv, NULL) == -1)
 		{
 			perror("execve");
 			free(argv);
@@ -71,8 +101,5 @@ int execute_command(char *command)
 	}
 
 	free(argv);
-	free(command);
-
-
-	return (0);
+	return 0;
 }
