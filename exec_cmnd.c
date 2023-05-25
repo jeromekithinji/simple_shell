@@ -15,7 +15,7 @@ int get_command(char *command)
 	if (bytesRead == -1)
 		perror("read");
 
-	return bytesRead;
+	return (bytesRead);
 }
 
 /**
@@ -37,12 +37,13 @@ int execute_command(char *command)
 	if (strcmp(command, "env") == 0)
 	{
 		char **env = environ;
+		
 		while (*env)
 		{
 			printf("%s\n", *env);
 			env++;
 		}
-		return 0;
+		return (0);
 	}
 
 	pid = fork();
@@ -50,13 +51,13 @@ int execute_command(char *command)
 	if (pid == -1)
 	{
 		perror("fork");
-		return -1;
+		return (-1);
 	}
-	
+
 	if (pid == 0)
 	{
 		argv = malloc(3 * sizeof(char *));
-		
+
 		if (argv == NULL)
 		{
 			perror("malloc");
@@ -67,7 +68,7 @@ int execute_command(char *command)
 		argv[1] = "-c";
 		argv[2] = command;
 		argv[3] = NULL;
-		
+
 		if (execve(argv[0], argv, NULL) == -1)
 		{
 			perror("execve");
@@ -81,5 +82,5 @@ int execute_command(char *command)
 	}
 
 	free(argv);
-	return 0;
+	return (0);
 }
