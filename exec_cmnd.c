@@ -46,7 +46,7 @@ int execute_command(char *command)
 	if (pid == 0)
 	{
 		argv = malloc(3 * sizeof(char *));
-		
+
 		if (argv == NULL)
 		{
 			perror("malloc");
@@ -69,7 +69,7 @@ int execute_command(char *command)
 	{
 		wait(&status);
 	}
-	
+
 	free(argv);
 	return (0);
 }
