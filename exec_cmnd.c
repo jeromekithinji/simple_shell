@@ -26,30 +26,30 @@ int get_command(char *command)
  * @command: Command to execute
  * Return: 0 on success, -1 on failure
  */
-
 int execute_command(char *command)
 {
 	pid_t pid;
 	int status;
-	int argc = 3;
 	char **argv = NULL;
+
+	if (strcmp(command, "exit") == 0)
+		exit(0);
 
 	pid = fork();
 
 	if (pid == -1)
 	{
 		perror("fork");
-		free(argv);
 		return (-1);
 	}
 
 	if (pid == 0)
 	{
-		argv = malloc((argc + 1) * sizeof(char *));
+		argv = malloc(3 * sizeof(char *));
+		
 		if (argv == NULL)
 		{
 			perror("malloc");
-			free(argv);
 			_exit(EXIT_FAILURE);
 		}
 
@@ -58,7 +58,7 @@ int execute_command(char *command)
 		argv[2] = command;
 		argv[3] = NULL;
 
-		if (execve("/bin/sh", argv, NULL) == -1)
+		if (execve(argv[0], argv, NULL) == -1)
 		{
 			perror("execve");
 			free(argv);
@@ -69,10 +69,7 @@ int execute_command(char *command)
 	{
 		wait(&status);
 	}
-
+	
 	free(argv);
-	free(command);
-
-
 	return (0);
 }
